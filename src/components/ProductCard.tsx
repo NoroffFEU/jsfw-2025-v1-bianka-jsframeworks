@@ -1,24 +1,28 @@
-import { Link } from 'react-router';
-import type { Product } from '../types/product';
+import { Link } from 'react-router'
+import type { Product } from '../types/product'
+import useCart from '../hooks/useCart'
+import useToast from '../hooks/useToast'
 
 interface ProductCardProps {
-  product: Product;
+  product: Product
 }
 
 function ProductCard({ product }: ProductCardProps) {
-  const hasDiscount = product.price > product.discountedPrice;
+  const { addItem } = useCart()
+  const { showToast } = useToast()
+  const hasDiscount = product.price > product.discountedPrice
   const discountPercentage = hasDiscount
     ? Math.round(((product.price - product.discountedPrice) / product.price) * 100)
-    : 0;
+    : 0
 
   return (
-    <Link to={`/product/${product.id}`}>
-      <div>
-        {hasDiscount && (
-          <div>
-            <span>-{discountPercentage}%</span>
-          </div>
-        )}
+    <article>
+      {hasDiscount && (
+        <div>
+          <span>-{discountPercentage}%</span>
+        </div>
+      )}
+      <Link to={`/product/${product.id}`}>
         <img src={product.image.url} alt={product.image.alt} />
         <h3>{product.title}</h3>
         <div>
@@ -32,9 +36,18 @@ function ProductCard({ product }: ProductCardProps) {
         <div>
           <span>Rating: {product.rating}/5</span>
         </div>
-      </div>
-    </Link>
-  );
+      </Link>
+      <button
+        type="button"
+        onClick={() => {
+          addItem(product)
+          showToast(`${product.title} added to cart.`)
+        }}
+      >
+        Add to cart
+      </button>
+    </article>
+  )
 }
 
-export default ProductCard;
+export default ProductCard
