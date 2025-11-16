@@ -43,3 +43,8 @@ export interface ProductsResponse {
     totalCount: number
   }
 }
+
+export interface ProductResponse {
+  data: Product
+  meta?: Record<string, unknown>
+}

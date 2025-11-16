@@ -15,13 +15,15 @@ function App() {
       <CartProvider>
         <BrowserRouter>
           <Navbar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/product/:id" element={<ProductDetailsPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout-success" element={<CheckoutSuccessPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
+          <main className="min-h-screen bg-slate-50">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/product/:id" element={<ProductDetailsPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout-success" element={<CheckoutSuccessPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+            </Routes>
+          </main>
         </BrowserRouter>
       </CartProvider>
     </ToastProvider>

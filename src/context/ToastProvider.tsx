@@ -29,8 +29,11 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ message, showToast }}>
       {children}
       {message && (
-        <div role="status">
-          <p>{message}</p>
+        <div
+          role="status"
+          className="fixed right-4 top-20 z-50 w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-4 text-sm font-semibold text-slate-800 shadow-xl"
+        >
+          {message}
         </div>
       )}
     </ToastContext.Provider>

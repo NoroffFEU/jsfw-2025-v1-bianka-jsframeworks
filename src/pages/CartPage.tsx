@@ -27,11 +27,18 @@ function CartPage() {
   }
 
   return (
-    <div>
-      <h1>Cart Page</h1>
-      <CartItemsList items={items} onQuantityChange={handleQuantityChange} onRemove={handleRemove} />
-      <CartSummary totalItems={totalItems} totalCost={totalCost} onCheckout={handleCheckout} />
-    </div>
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-10 lg:flex-row lg:items-start">
+      <div className="flex-1">
+        <CartItemsList items={items} onQuantityChange={handleQuantityChange} onRemove={handleRemove} />
+      </div>
+      <div className="w-full max-w-sm lg:sticky lg:top-24">
+        <CartSummary
+          totalItems={totalItems}
+          totalCost={totalCost}
+          onCheckout={handleCheckout}
+        />
+      </div>
+    </main>
   )
 }
 

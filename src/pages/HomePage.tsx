@@ -4,6 +4,7 @@ import ProductGrid from '../components/ProductGrid'
 import SearchBar from '../components/home/SearchBar'
 import SortControls, { type SortOption } from '../components/home/SortControls'
 import SearchResults from '../components/home/SearchResults'
+import { getProducts } from '../services/onlineShop'
 
 function sortProducts(products: Product[], sortOption: SortOption) {
   const productsCopy = [...products]
@@ -32,15 +33,16 @@ function HomePage() {
   const [sortOption, setSortOption] = useState<SortOption>('name-asc')
 
   useEffect(() => {
+    const controller = new AbortController()
+
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://v2.api.noroff.dev/online-shop')
-        if (!response.ok) {
-          throw new Error('Failed to fetch products')
-        }
-        const data = await response.json()
-        setProducts(data.data)
+        const results = await getProducts(controller.signal)
+        setProducts(results)
       } catch (err) {
+        if ((err as Error).name === 'AbortError') {
+          return
+        }
         setError(err instanceof Error ? err.message : 'An error occurred')
       } finally {
         setLoading(false)
@@ -48,6 +50,8 @@ function HomePage() {
     }
 
     fetchProducts()
+
+    return () => controller.abort()
   }, [])
 
   const filteredProducts = useMemo(() => {
@@ -69,21 +73,35 @@ function HomePage() {
   const searchResults = searchQuery.trim() ? filteredProducts : []
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center text-lg text-slate-600">Loading...</div>
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center text-lg text-red-600">
+        Error: {error}
+      </div>
+    )
   }
 
   return (
-    <div>
-      <h1>Home Page</h1>
-      <SearchBar value={searchQuery} onChange={setSearchQuery} />
-      <SortControls value={sortOption} onChange={setSortOption} />
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8">
+      <header className="space-y-2 text-center md:text-left">
+        <h1 className="text-3xl font-semibold text-slate-900">Browse Products</h1>
+        <p className="text-base text-slate-600">Search, sort, and find the best deals available today.</p>
+      </header>
+
+      <section className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2">
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <SortControls value={sortOption} onChange={setSortOption} />
+      </section>
+
       <SearchResults results={searchResults} onResultSelect={() => setSearchQuery('')} />
+
       {sortedProducts.length === 0 ? (
-        <p>No products match your search.</p>
+        <p className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-600">
+          No products match your search.
+        </p>
       ) : (
         <ProductGrid products={sortedProducts} />
       )}
