@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { ToastContext } from './toast-context'
 
 function ToastProvider({ children }: { children: React.ReactNode }) {

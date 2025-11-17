@@ -1,3 +1,5 @@
+import React from 'react'
+
 export type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc'
 
 interface SortControlsProps {

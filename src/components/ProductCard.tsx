@@ -1,3 +1,4 @@
+import React from 'react'
 import { Link } from 'react-router'
 import type { Product } from '../types/product'
 import useCart from '../hooks/useCart'

@@ -1,3 +1,5 @@
+import React from 'react'
+
 interface CartSummaryProps {
   totalItems: number
   totalCost: number
